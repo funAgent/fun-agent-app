@@ -92,6 +92,15 @@ const webSiteJsonLd = {
       rel="stylesheet"
     />
 
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q21G3EKRV7"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-Q21G3EKRV7');
+    </script>
+
     <!-- JSON-LD structured data -->
     <script type="application/ld+json" set:html={JSON.stringify(orgJsonLd)} />
     <script type="application/ld+json" set:html={JSON.stringify(webSiteJsonLd)} />
