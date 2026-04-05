@@ -1,0 +1,108 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import ProjectCard from '../../../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+import { getLocale, t } from '../../../i18n';
+import type { Locale } from '../../../i18n';
+
+export function getStaticPaths() {
+  return [{ params: { locale: 'zh' } }, { params: { locale: 'en' } }];
+}
+
+const locale = getLocale(Astro.url) as Locale;
+const i18n = t(locale);
+
+const allProjects = await getCollection('projects');
+const sorted = allProjects.sort((a, b) => a.data.order - b.data.order);
+
+const categories = ['all', 'tool', 'course', 'experiment'] as const;
+const categoryLabels = {
+  all: i18n.projects.all,
+  tool: i18n.projects.tools,
+  course: i18n.projects.courses,
+  experiment: i18n.projects.experiments,
+};
+---
+
+<Base title={i18n.projects.title} description={i18n.projects.subtitle}>
+  <Header />
+  <main class="flex-1 pt-24 pb-20">
+    <div class="mx-auto max-w-6xl px-6">
+      <div class="mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold font-[var(--font-heading)] animate-fade-in-up">
+          {i18n.projects.title}
+        </h1>
+        <p class="mt-3 text-lg text-[var(--color-text-secondary)] animate-fade-in-up animate-delay-100">
+          {i18n.projects.subtitle}
+        </p>
+      </div>
+
+      <!-- Category filter tabs -->
+      <div class="flex gap-2 mb-8 animate-fade-in-up animate-delay-200" id="category-tabs">
+        {categories.map((cat) => (
+          <button
+            data-category={cat}
+            class:list={[
+              'px-4 py-2 text-sm rounded-lg transition-all border',
+              'category-tab',
+              cat === 'all'
+                ? 'bg-[var(--color-accent)] text-white border-[var(--color-accent)]'
+                : 'text-[var(--color-text-secondary)] border-[var(--color-border)] hover:border-[var(--color-accent)]/30 hover:text-[var(--color-text)]',
+            ]}
+          >
+            {categoryLabels[cat]}
+          </button>
+        ))}
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6" id="project-grid">
+        {sorted.map((project) => (
+          <div data-project-category={project.data.category} class="project-item">
+            <ProjectCard
+              name={project.data.name}
+              slug={project.data.slug}
+              tagline={project.data.tagline}
+              category={project.data.category}
+              status={project.data.status}
+              logo={project.data.logo}
+              github={project.data.github}
+              website={project.data.website}
+              locale={locale}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Base>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const tabs = document.querySelectorAll<HTMLButtonElement>('.category-tab');
+    const items = document.querySelectorAll<HTMLElement>('.project-item');
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const cat = tab.dataset.category;
+
+        tabs.forEach((t) => {
+          t.classList.remove('bg-[var(--color-accent)]', 'text-white', 'border-[var(--color-accent)]');
+          t.classList.add('text-[var(--color-text-secondary)]', 'border-[var(--color-border)]');
+        });
+        tab.classList.remove('text-[var(--color-text-secondary)]', 'border-[var(--color-border)]');
+        tab.classList.add('bg-[var(--color-accent)]', 'text-white', 'border-[var(--color-accent)]');
+
+        items.forEach((item) => {
+          if (cat === 'all' || item.dataset.projectCategory === cat) {
+            item.style.display = '';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      });
+    });
+  });
+</script>

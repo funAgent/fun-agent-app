@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C /Users/wang/workspace/GitHub/fun-agent-app log --oneline -10 2>&1)",
+      "Bash(git -C /Users/wang/workspace/GitHub/fun-agent-app remote -v 2>&1)"
+    ]
+  }
+}

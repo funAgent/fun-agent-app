@@ -1,0 +1,28 @@
+---
+import { getLocale, t } from '../i18n';
+
+const locale = getLocale(Astro.url);
+const i18n = t(locale);
+
+const stats = [
+  { value: '2+', label: i18n.stats.projects },
+  { value: '49', label: i18n.stats.lessons },
+];
+---
+
+<section class="py-12 border-y border-[var(--color-border-soft)]">
+  <div class="mx-auto max-w-4xl px-6">
+    <div class="flex items-center justify-center gap-12 md:gap-20">
+      {stats.map((stat) => (
+        <div class="text-center">
+          <div class="text-3xl md:text-4xl font-bold font-[var(--font-heading)] bg-gradient-to-r from-[var(--color-gradient-start)] to-[var(--color-gradient-end)] bg-clip-text text-transparent">
+            {stat.value}
+          </div>
+          <div class="mt-1 text-sm text-[var(--color-text-tertiary)]">
+            {stat.label}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

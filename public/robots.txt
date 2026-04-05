@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://funagent.app/sitemap-index.xml

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <rect width="128" height="128" rx="28" fill="#1a1a2e"/>
+  <rect x="8" y="8" width="112" height="112" rx="22" fill="#16162a" stroke="#2d2b55" stroke-width="2"/>
+  <text x="64" y="52" text-anchor="middle" font-family="monospace" font-size="28" font-weight="bold" fill="#7c3aed">&gt;_</text>
+  <text x="64" y="88" text-anchor="middle" font-family="monospace" font-size="18" font-weight="bold" fill="#a78bfa">BCC</text>
+</svg>

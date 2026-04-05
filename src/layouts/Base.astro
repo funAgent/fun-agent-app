@@ -1,0 +1,105 @@
+---
+import '../styles/global.css';
+import { getLocale, t, switchLocalePath } from '../i18n';
+import type { Locale } from '../i18n';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  jsonLd?: Record<string, unknown>;
+}
+
+const locale = getLocale(Astro.url);
+const i18n = t(locale);
+const { title = i18n.site.title, description = i18n.site.description, ogImage, jsonLd } =
+  Astro.props;
+const fullTitle = title === i18n.site.title ? title : `${title} - ${i18n.site.title}`;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageURL = new URL(ogImage ?? '/og-image.png', Astro.site).href;
+
+const altLocale: Locale = locale === 'zh' ? 'en' : 'zh';
+const altPath = switchLocalePath(Astro.url, altLocale);
+const altURL = new URL(altPath, Astro.site).href;
+const selfURL = canonicalURL.href;
+
+const ogLocaleMap: Record<Locale, string> = { zh: 'zh_CN', en: 'en_US' };
+
+const orgJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'funAgent',
+  url: 'https://funagent.app',
+  logo: new URL('/favicon.svg', Astro.site).href,
+  description: 'Making AI agents fun — tools, courses, and experiments',
+  sameAs: [
+    'https://github.com/funAgent',
+    'https://x.com/funAgentApp',
+  ],
+};
+
+const webSiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'funAgent',
+  url: 'https://funagent.app',
+  inLanguage: [locale],
+};
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#0a0a0b" />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- hreflang -->
+    <link rel="alternate" hreflang={locale} href={selfURL} />
+    <link rel="alternate" hreflang={altLocale} href={altURL} />
+    <link rel="alternate" hreflang="x-default" href={new URL('/zh/', Astro.site).href} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:site_name" content="funAgent" />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content={ogLocaleMap[locale]} />
+    <meta property="og:locale:alternate" content={ogLocaleMap[altLocale]} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@funAgentApp" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- JSON-LD structured data -->
+    <script type="application/ld+json" set:html={JSON.stringify(orgJsonLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(webSiteJsonLd)} />
+    {jsonLd && (
+      <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    )}
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <slot />
+  </body>
+</html>

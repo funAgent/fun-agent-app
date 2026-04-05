@@ -1,0 +1,39 @@
+name: AIbubu
+slug: ai-bubu
+tagline:
+  zh: AI 时代的编码计步器
+  en: A coding step counter for the AI era
+description:
+  zh: 桌面宠物应用，监控你使用 AI 编码工具（Cursor、Claude Code、Codex、Trae）的活跃度，将其量化为步数，驱动桌面宠物行走 — 编码越多，宠物跑得越快。
+  en: A desktop pet app that monitors your usage of AI coding tools (Cursor, Claude Code, Codex, Trae), quantifies your coding activity into steps, and drives a desktop pet — the more you code, the faster your pet runs.
+category: tool
+status: released
+website: https://aibubu.app
+github: https://github.com/funAgent/ai-bubu
+download: https://github.com/funAgent/ai-bubu/releases
+logo: /projects/ai-bubu/logo.png
+hero: /projects/ai-bubu/hero.mp4
+screenshots:
+  - /projects/ai-bubu/screenshots/today.jpg
+  - /projects/ai-bubu/screenshots/rank.jpg
+  - /projects/ai-bubu/screenshots/pet.jpg
+  - /projects/ai-bubu/screenshots/setting.jpg
+techStack:
+  - Tauri 2
+  - Vue 3
+  - Rust
+  - Pinia
+  - Vite
+highlights:
+  zh:
+    - 支持 Cursor、Claude Code、Codex CLI、Trae 等 AI 工具监控
+    - 8 款内置像素皮肤，支持自定义导入
+    - 局域网社交 — 自动发现队友宠物，查看排行榜
+    - 中英双语 UI，开机自启
+  en:
+    - Monitors Cursor, Claude Code, Codex CLI, Trae and more
+    - 8 built-in pixel skins with custom import support
+    - LAN social — auto-discover teammates' pets and leaderboard
+    - Bilingual UI with auto-start support
+featured: true
+order: 1

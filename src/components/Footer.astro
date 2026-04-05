@@ -1,0 +1,47 @@
+---
+import { getLocale, t } from '../i18n';
+
+const locale = getLocale(Astro.url);
+const i18n = t(locale);
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-[var(--color-border-soft)] mt-auto">
+  <div class="mx-auto max-w-6xl px-6 py-12">
+    <div class="flex flex-col md:flex-row justify-between items-start gap-8">
+      <div>
+        <a href={`/${locale}/`} class="inline-block mb-3">
+          <span class="text-lg font-bold font-[var(--font-heading)]">
+            <span class="text-[var(--color-text)]">fun</span><span class="bg-gradient-to-r from-[var(--color-gradient-start)] to-[var(--color-gradient-end)] bg-clip-text text-transparent">Agent</span>
+          </span>
+        </a>
+        <p class="text-sm text-[var(--color-text-tertiary)] max-w-xs">
+          {i18n.site.description}
+        </p>
+      </div>
+
+      <div class="flex gap-12">
+        <div>
+          <h4 class="text-sm font-semibold text-[var(--color-text)] mb-3">{i18n.nav.projects}</h4>
+          <ul class="space-y-2">
+            <li><a href="https://aibubu.app" target="_blank" rel="noopener noreferrer" class="text-sm text-[var(--color-text-tertiary)] hover:text-[var(--color-text-secondary)] transition-colors">AIbubu</a></li>
+            <li><a href="https://build.funagent.app" target="_blank" rel="noopener noreferrer" class="text-sm text-[var(--color-text-tertiary)] hover:text-[var(--color-text-secondary)] transition-colors">Build Claude Code</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-sm font-semibold text-[var(--color-text)] mb-3">{i18n.nav.about}</h4>
+          <ul class="space-y-2">
+            <li><a href="https://github.com/funAgent" target="_blank" rel="noopener noreferrer" class="text-sm text-[var(--color-text-tertiary)] hover:text-[var(--color-text-secondary)] transition-colors">GitHub</a></li>
+            <li><a href="https://x.com/funAgentApp" target="_blank" rel="noopener noreferrer" class="text-sm text-[var(--color-text-tertiary)] hover:text-[var(--color-text-secondary)] transition-colors">X (Twitter)</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-10 pt-6 border-t border-[var(--color-border-soft)] text-center">
+      <p class="text-xs text-[var(--color-text-tertiary)]">
+        &copy; {year} funAgent. {i18n.footer.rights}.
+      </p>
+    </div>
+  </div>
+</footer>

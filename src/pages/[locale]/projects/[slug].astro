@@ -1,0 +1,203 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import TagBadge from '../../../components/TagBadge.astro';
+import { getCollection } from 'astro:content';
+import { t, localePath } from '../../../i18n';
+import type { Locale } from '../../../i18n';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  const locales: Locale[] = ['zh', 'en'];
+  return locales.flatMap((locale) =>
+    projects.map((project) => ({
+      params: { locale, slug: project.data.slug },
+      props: { project, locale },
+    })),
+  );
+}
+
+const { project, locale } = Astro.props;
+const data = project.data;
+const i18n = t(locale);
+
+const statusColors = {
+  released: 'bg-[var(--color-status-released)]',
+  beta: 'bg-[var(--color-status-beta)]',
+  wip: 'bg-[var(--color-status-wip)]',
+} as const;
+
+const siteBase = 'https://funagent.app';
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: i18n.nav.home,
+      item: `${siteBase}/${locale}/`,
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: i18n.nav.projects,
+      item: `${siteBase}/${locale}/projects/`,
+    },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: data.name,
+    },
+  ],
+};
+---
+
+<Base title={`${data.name} — ${data.tagline[locale]}`} description={data.description[locale]} jsonLd={breadcrumbJsonLd}>
+  <Header />
+  <main class="flex-1 pt-24 pb-20">
+    <div class="mx-auto max-w-4xl px-6">
+      <!-- Breadcrumb -->
+      <nav class="mb-8 animate-fade-in">
+        <ol class="flex items-center gap-2 text-sm text-[var(--color-text-tertiary)]">
+          <li>
+            <a href={localePath(locale, '/')} class="hover:text-[var(--color-text-secondary)] transition-colors">
+              {i18n.nav.home}
+            </a>
+          </li>
+          <li>/</li>
+          <li>
+            <a href={localePath(locale, '/projects/')} class="hover:text-[var(--color-text-secondary)] transition-colors">
+              {i18n.nav.projects}
+            </a>
+          </li>
+          <li>/</li>
+          <li class="text-[var(--color-text-secondary)]">{data.name}</li>
+        </ol>
+      </nav>
+
+      <!-- Project header -->
+      <div class="animate-fade-in-up">
+        <div class="flex items-start gap-4 mb-6">
+          <div class="w-16 h-16 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] flex items-center justify-center overflow-hidden shrink-0">
+            <img src={data.logo} alt={data.name} class="w-10 h-10 object-contain" />
+          </div>
+          <div>
+            <div class="flex items-center gap-3 mb-1">
+              <h1 class="text-3xl md:text-4xl font-bold font-[var(--font-heading)]">
+                {data.name}
+              </h1>
+              <TagBadge category={data.category} locale={locale} />
+            </div>
+            <div class="flex items-center gap-2 mt-1">
+              <span class:list={['w-2 h-2 rounded-full', statusColors[data.status]]}></span>
+              <span class="text-sm text-[var(--color-text-tertiary)]">
+                {i18n.projects.status[data.status]}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <p class="text-lg text-[var(--color-text-secondary)] leading-relaxed mb-8">
+          {data.description[locale]}
+        </p>
+
+        <!-- Action buttons -->
+        <div class="flex flex-wrap gap-3 mb-12">
+          {data.website && (
+            <a
+              href={data.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[var(--color-gradient-start)] to-[var(--color-gradient-end)] text-white font-medium text-sm transition-all hover:shadow-[0_0_30px_rgba(99,102,241,0.3)] hover:-translate-y-0.5"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+              </svg>
+              {i18n.projects.visitSite}
+            </a>
+          )}
+          <a
+            href={data.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-secondary)] font-medium text-sm transition-all hover:border-[var(--color-accent)]/30 hover:text-[var(--color-text)] hover:-translate-y-0.5"
+          >
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+            {i18n.projects.viewSource}
+          </a>
+          {data.download && (
+            <a
+              href={data.download}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-secondary)] font-medium text-sm transition-all hover:border-[var(--color-accent)]/30 hover:text-[var(--color-text)] hover:-translate-y-0.5"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+              </svg>
+              {i18n.projects.download}
+            </a>
+          )}
+        </div>
+      </div>
+
+      <!-- Screenshots -->
+      {data.screenshots.length > 0 && (
+        <section class="mb-12 animate-fade-in-up animate-delay-100">
+          <div class="grid grid-cols-2 gap-4">
+            {data.screenshots.map((src: string) => (
+              <div class="rounded-xl overflow-hidden border border-[var(--color-border)] bg-[var(--color-surface)]">
+                <img
+                  src={src}
+                  alt={`${data.name} screenshot`}
+                  class="w-full h-auto"
+                  loading="lazy"
+                />
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <!-- Highlights -->
+      {data.highlights && (
+        <section class="mb-12 animate-fade-in-up animate-delay-200">
+          <h2 class="text-xl font-semibold font-[var(--font-heading)] mb-4">
+            {i18n.projects.highlights}
+          </h2>
+          <ul class="space-y-3">
+            {data.highlights[locale].map((item: string) => (
+              <li class="flex items-start gap-3 text-[var(--color-text-secondary)]">
+                <svg class="w-5 h-5 text-[var(--color-accent)] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                </svg>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <!-- Tech Stack -->
+      {data.techStack.length > 0 && (
+        <section class="animate-fade-in-up animate-delay-300">
+          <h2 class="text-xl font-semibold font-[var(--font-heading)] mb-4">
+            {i18n.projects.techStack}
+          </h2>
+          <div class="flex flex-wrap gap-2">
+            {data.techStack.map((tech: string) => (
+              <span class="px-3 py-1.5 text-sm rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] text-[var(--color-text-secondary)]">
+                {tech}
+              </span>
+            ))}
+          </div>
+        </section>
+      )}
+    </div>
+  </main>
+  <Footer />
+</Base>

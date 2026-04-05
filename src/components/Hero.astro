@@ -1,0 +1,53 @@
+---
+import { getLocale, t, localePath } from '../i18n';
+
+const locale = getLocale(Astro.url);
+const i18n = t(locale);
+---
+
+<section class="relative pt-32 pb-20 overflow-hidden">
+  <!-- Background glow -->
+  <div class="absolute inset-0 -z-10">
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-[var(--color-gradient-start)]/8 rounded-full blur-[120px]"></div>
+    <div class="absolute top-1/3 left-1/3 w-[300px] h-[300px] bg-[var(--color-gradient-end)]/6 rounded-full blur-[100px]"></div>
+  </div>
+
+  <div class="mx-auto max-w-4xl px-6 text-center">
+    <div class="animate-fade-in-up">
+      <h1 class="text-5xl md:text-7xl font-bold font-[var(--font-heading)] tracking-tight leading-[1.1]">
+        {i18n.hero.heading}
+        <br />
+        <span class="bg-gradient-to-r from-[var(--color-gradient-start)] to-[var(--color-gradient-end)] bg-clip-text text-transparent">
+          {i18n.hero.headingHighlight}
+        </span>
+      </h1>
+    </div>
+
+    <p class="mt-6 text-lg md:text-xl text-[var(--color-text-secondary)] max-w-2xl mx-auto leading-relaxed animate-fade-in-up animate-delay-100">
+      {i18n.hero.description}
+    </p>
+
+    <div class="mt-10 flex items-center justify-center gap-4 animate-fade-in-up animate-delay-200">
+      <a
+        href={localePath(locale, '/projects/')}
+        class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[var(--color-gradient-start)] to-[var(--color-gradient-end)] text-white font-medium text-sm transition-all hover:shadow-[0_0_30px_rgba(99,102,241,0.3)] hover:-translate-y-0.5"
+      >
+        {i18n.hero.cta}
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+        </svg>
+      </a>
+      <a
+        href="https://github.com/funAgent"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-secondary)] font-medium text-sm transition-all hover:border-[var(--color-accent)]/30 hover:text-[var(--color-text)] hover:-translate-y-0.5"
+      >
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+        {i18n.hero.github}
+      </a>
+    </div>
+  </div>
+</section>

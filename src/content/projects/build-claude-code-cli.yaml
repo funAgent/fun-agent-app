@@ -1,0 +1,36 @@
+name: Build Claude Code
+slug: build-claude-code-cli
+tagline:
+  zh: 从零构建企业级 AI Agent CLI
+  en: Build an enterprise-grade AI Agent CLI from scratch
+description:
+  zh: 49 节渐进式课程，教你从 npm init 开始，逐课构建出一个架构对标 Claude Code 的完整 AI Agent CLI 产品。每一课产出一个可独立运行的项目快照。
+  en: 49 progressive lessons teaching you to build a complete AI Agent CLI product architecturally comparable to Claude Code, starting from npm init. Each lesson produces a standalone runnable snapshot.
+category: course
+status: released
+website: https://build.funagent.app
+github: https://github.com/funAgent/build-claude-code-cli
+logo: /projects/build-claude-code-cli/logo.svg
+screenshots:
+  - /projects/build-claude-code-cli/screenshots/home.jpg
+  - /projects/build-claude-code-cli/screenshots/lesson.jpg
+techStack:
+  - TypeScript
+  - Node.js
+  - Next.js 16
+  - React 19
+  - Tailwind CSS
+  - Anthropic SDK
+highlights:
+  zh:
+    - 49 节课从 API 调用到遥测诊断，完整覆盖
+    - 每课产出可独立运行的项目快照
+    - 交互式源码查看器 + 终端录制播放器
+    - 涵盖工具体系、Prompt 工程、安全权限、多 Agent 协作
+  en:
+    - 49 lessons from API basics to telemetry diagnostics
+    - Each lesson produces a standalone runnable snapshot
+    - Interactive source viewer + terminal recording player
+    - Covers tool systems, prompt engineering, security, multi-agent collaboration
+featured: true
+order: 2

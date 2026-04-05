@@ -1,0 +1,71 @@
+---
+import TagBadge from './TagBadge.astro';
+import { getLocale, t, localePath } from '../i18n';
+import type { Locale } from '../i18n';
+
+interface Props {
+  name: string;
+  slug: string;
+  tagline: { zh: string; en: string };
+  category: 'tool' | 'course' | 'experiment';
+  status: 'released' | 'beta' | 'wip';
+  logo: string;
+  github: string;
+  website?: string;
+  locale?: Locale;
+}
+
+const resolvedLocale = Astro.props.locale ?? getLocale(Astro.url);
+const i18n = t(resolvedLocale);
+const { name, slug, tagline, category, status, logo, github, website } = Astro.props;
+
+const statusColors = {
+  released: 'bg-[var(--color-status-released)]',
+  beta: 'bg-[var(--color-status-beta)]',
+  wip: 'bg-[var(--color-status-wip)]',
+} as const;
+---
+
+<a
+  href={localePath(resolvedLocale, `/projects/${slug}/`)}
+  class="group relative flex flex-col rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 transition-all duration-300 hover:border-[var(--color-accent)]/30 hover:bg-[var(--color-surface-hover)] hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(99,102,241,0.08)]"
+>
+  <div class="flex items-start justify-between mb-4">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-[var(--color-bg)] border border-[var(--color-border)] flex items-center justify-center overflow-hidden">
+        <img src={logo} alt={name} class="w-6 h-6 object-contain" loading="lazy" />
+      </div>
+      <div>
+        <h3 class="font-semibold font-[var(--font-heading)] text-[var(--color-text)] group-hover:text-[var(--color-accent)] transition-colors">
+          {name}
+        </h3>
+        <div class="flex items-center gap-2 mt-0.5">
+          <span class:list={['w-1.5 h-1.5 rounded-full', statusColors[status]]}></span>
+          <span class="text-xs text-[var(--color-text-tertiary)]">
+            {i18n.projects.status[status]}
+          </span>
+        </div>
+      </div>
+    </div>
+    <TagBadge category={category} locale={resolvedLocale} />
+  </div>
+
+  <p class="text-sm text-[var(--color-text-secondary)] leading-relaxed flex-1">
+    {tagline[resolvedLocale]}
+  </p>
+
+  <div class="mt-4 pt-4 border-t border-[var(--color-border-soft)] flex items-center justify-between">
+    <span class="text-xs text-[var(--color-accent)] font-medium group-hover:underline">
+      {i18n.projects.viewProject} &rarr;
+    </span>
+    <div class="flex items-center gap-2">
+      {website && (
+        <span class="text-xs text-[var(--color-text-tertiary)]" title={i18n.projects.visitSite}>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+          </svg>
+        </span>
+      )}
+    </div>
+  </div>
+</a>

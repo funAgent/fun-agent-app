@@ -1,0 +1,29 @@
+---
+import { getLocale, t } from '../i18n';
+import type { Locale } from '../i18n';
+
+interface Props {
+  category: 'tool' | 'course' | 'experiment';
+  locale?: Locale;
+}
+
+const resolvedLocale = Astro.props.locale ?? getLocale(Astro.url);
+const i18n = t(resolvedLocale);
+const { category } = Astro.props;
+
+const labelMap = {
+  tool: i18n.projects.tools,
+  course: i18n.projects.courses,
+  experiment: i18n.projects.experiments,
+} as const;
+
+const colorMap = {
+  tool: 'text-[var(--color-tag-tool)] bg-[var(--color-tag-tool-bg)]',
+  course: 'text-[var(--color-tag-course)] bg-[var(--color-tag-course-bg)]',
+  experiment: 'text-[var(--color-tag-experiment)] bg-[var(--color-tag-experiment-bg)]',
+} as const;
+---
+
+<span class:list={['inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium', colorMap[category]]}>
+  {labelMap[category]}
+</span>
