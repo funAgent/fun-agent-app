@@ -1,6 +1,10 @@
 {
   "framework": "astro",
-  "rewrites": [
-    { "source": "/", "destination": "/zh/" }
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/zh/",
+      "permanent": true
+    }
   ]
 }
